@@ -23,6 +23,7 @@ class App extends React.Component {
       },
     })
       .then((results) => {
+        // console.log(results);
         this.setState({ listing: results.data[0] });
         console.log(this.state.listing);
       })

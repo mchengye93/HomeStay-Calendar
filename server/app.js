@@ -4,7 +4,7 @@ const path = require('path');
 const db = require('../database/index.js');
 
 const app = express();
-const port = 3000;
+
 
 const distDir = path.join(__dirname, '../client/dist');
 
@@ -18,4 +18,4 @@ app.get('/bookings', (req, res) => {
   // res.end();
 });
 
-app.listen(port, () => console.log('Listening on Port:', port));
+module.exports = app;

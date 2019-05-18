@@ -11,7 +11,7 @@ const listingGenerator = () => {
     listing.listingId = x;
 
     const randomDateArr = [];
-    for (let i = 0; i < 80; i += 1) {
+    for (let i = 0; i < 10; i += 1) {
       const now = new Date();
 
       const aYearFromNow = new Date();

@@ -23,10 +23,12 @@ const getBookings = (listingIdObj, res) => {
   // console.log('db listIdobj', listingIdObj);
   Listing.find(listingIdObj, (err, results) => {
     if (err) {
-      res.end(err);
+      res.status(404);
+      res.send(err);
     } else {
       // console.log('inside dbs getBookings result:', JSON.stringify(results));
-      res.end(JSON.stringify(results));
+      res.status(200);
+      res.send(results);
     }
   });
 };
