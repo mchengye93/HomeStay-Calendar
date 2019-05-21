@@ -1,5 +1,6 @@
 import React from 'react';
 import moment from 'moment';
+import Day from './Day.jsx';
 
 const bookedTd = {
   width: '40px',
@@ -36,7 +37,7 @@ const bookedDiv = {
 };
 
 
-const clickedDiv = {
+const clickedTd = {
   width: '40px',
   height: '39px',
   background: 'rgb(0, 132, 137)',
@@ -47,7 +48,7 @@ const clickedDiv = {
 
 };
 
-const clickedTd = {
+const clickedDiv = {
   fontFamily: 'Circular, -apple-system, BlinkMacSystemFont, Roboto, "Helvetica Neue", sans-serif',
   fontWeight: '700',
   height: '12px',
@@ -80,7 +81,6 @@ class DaysInMonth extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-
       dateObject: this.props.month,
     };
 
@@ -124,7 +124,8 @@ class DaysInMonth extends React.Component {
   }
 
   changeStyle(e) {
-
+    console.log(e.target);
+    this.setState({ checkIn: !this.state.checkIn });
   }
 
 
@@ -133,7 +134,7 @@ class DaysInMonth extends React.Component {
     const totalDaysInMonth = moment(dateObject).daysInMonth();
     const { bookings } = this.props.listing;
 
-    console.log('bookings', bookings);
+    // console.log('bookings', bookings);
     const month = moment(dateObject).format('MM');
     const year = moment(dateObject).format('YYYY');
 
@@ -144,32 +145,17 @@ class DaysInMonth extends React.Component {
       const day = d > 9 ? d : `0${d}`;
       const date = `${year}-${month}-${day}`;
       const booked = this.bookedDay(date) ? 'booked' : '';
-      const beforeCurrent = new Date(date) < new Date();
-      console.log('less than current day? ', new Date(date), new Date(), beforeCurrent);
-      // console.log(beforeCurrent);
+
+      const currentDate = new Date();
+      currentDate.setDate(currentDate.getDate() - 1);
+      const beforeCurrent = new Date(date) < currentDate;
+
       if (this.bookedDay(date) || beforeCurrent) {
-        daysInMonth.push(
-          <td style={bookedTd} key={d} className={`calendar-day ${booked}`}>
-            <div style={div1}>
-              <div style={div2}>
-                <div style={bookedDiv}>{d}</div>
-              </div>
-            </div>
-          </td>,
-        );
+        daysInMonth.push(<Day d={d} booked="true" />);
       } else {
-        daysInMonth.push(
-          <td onClick={this.changeStyle} style={availableTd} key={d} className={`calendar-day ${booked}`}>
-            <div style={div1}>
-              <div style={div2}>
-                <div style={availableDiv}>{d}</div>
-              </div>
-            </div>
-          </td>,
-        );
+        daysInMonth.push(<Day d={d} booked="false" />);
       }
     }
-
     return daysInMonth;
   }
 
