@@ -1,9 +1,9 @@
 const request = require('supertest');
-
+const app = require('../../server/app');
 
 describe('API Test', () => {
   test('GET /bookings/:listId', async () => {
-    const response = await request('http://localhost:3000').get('/bookings').query({ listingId: 0 });
+    const response = await request(app).get('/bookings').query({ listingId: 0 });
     const listing = response.body[0];
     // console.log(listing);
     expect(response.statusCode).toBe(200);
