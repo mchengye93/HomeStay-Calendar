@@ -11,5 +11,6 @@ describe('API Test', () => {
     expect(listing).toHaveProperty('bookings');
     expect(listing).toHaveProperty('minNights');
     expect(listing).toHaveProperty('maxNights');
+    expect(listing.bookings.length).toBeGreaterThan(0);
   });
 });

@@ -213,7 +213,7 @@ class Calendar extends React.Component {
                     </table>
                   </div>
                   <div id="calendar2" style={calendars}>
-                    <div style={monthStyle} className="calendar-navi">
+                    <div style={monthStyle} className="next-month-calendar">
                       <strong>{this.nextMonth()}</strong>
                     </div>
                     <table className="next-calendar-day">

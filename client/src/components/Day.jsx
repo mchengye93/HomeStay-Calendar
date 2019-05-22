@@ -1,4 +1,16 @@
 import React from 'react';
+import styled from 'styled-components';
+
+const Td = styled.td`
+  width: '40px',
+  height: '39px',
+  background: 'repeating-linear-gradient(-45deg, rgb(255, 255, 255), rgb(255, 255, 255) 3px, rgb(235, 235, 235) 3px, rgb(235, 235, 235) 4px)',
+  color: 'rgb(0, 0, 0)',
+  border: '2px solid rgb(255, 255, 255)',
+  borde-radius: '7px ',
+  padding: '0px',
+
+`;
 
 const bookedTd = {
   width: '40px',

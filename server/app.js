@@ -7,8 +7,9 @@ const app = express();
 
 
 const distDir = path.join(__dirname, '../client/dist');
+const publicDir = path.join(__dirname, '../public');
 
-app.use(express.static(distDir));
+app.use(express.static(publicDir));
 app.use(bodyParser.json());
 
 app.get('/bookings', (req, res) => {
