@@ -10,16 +10,15 @@ const weekDay = {
   lineHeight: '20.02px',
   textAlign: 'center',
   width: '40px',
-  fontSize: 'smaller',
 };
 const WeekDays = () => {
   const weekdayshort = moment.weekdaysShort();
 
   const weekdaysshortname = weekdayshort.map(day => (
 
-    <td style={weekDay} key={day} className="week-day">
+    <th style={weekDay} key={day} className="week-day">
       {day.substring(0, 2)}
-    </td>
+    </th>
   ));
   return (
     <thead>

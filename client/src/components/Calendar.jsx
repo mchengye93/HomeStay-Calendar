@@ -18,6 +18,7 @@ class Calendar extends React.Component {
       clicked: true,
       checkIn: null,
       checkOut: null,
+      lastDay: null,
     };
 
 
@@ -27,6 +28,11 @@ class Calendar extends React.Component {
     this.month = this.month.bind(this);
     this.nextMonth = this.nextMonth.bind(this);
     this.clearDate = this.clearDate.bind(this);
+
+    this.setCheckIn = this.setCheckIn.bind(this);
+    this.setCheckOut = this.setCheckOut.bind(this);
+
+    this.lookForLastDay = this.lookForLastDay.bind(this);
   }
 
   componentDidMount() {
@@ -58,12 +64,70 @@ class Calendar extends React.Component {
   }
 
   clearDate() {
-    console.log('clearDate from calendar!');
     this.setState({
       checkIn: null,
       checkOut: null,
-      clicked: false,
+      clicked: true,
+      lastDay: null,
     });
+  }
+
+  lookForLastDay(date) {
+    const { bookings } = this.props.listing;
+    for (let i = 0; i < bookings.length; i += 1) {
+      const bookingDate = bookings[i];
+      if (bookingDate > date) {
+        return (bookingDate);
+      }
+    }
+  }
+
+  setCheckIn(date) {
+    if (this.state.checkIn !== null && this.state.checkOut !== null) {
+      // reset new checkIn date last day is less than checkout then reset checkout
+      // set new checkin
+      const newLastDay = this.lookForLastDay(date);
+
+      if (newLastDay < this.state.checkOut) {
+        // reset checkin date
+        this.setState({
+          checkIn: date,
+          checkOut: null,
+          lastDay: newLastDay,
+          renderAll: false,
+        });
+      } else if (date < this.state.checkOut) {
+        this.setState({ checkIn: date });
+      } else {
+        const lastCheckOutDay = this.lookForLastDay(date);
+        this.setState({
+          checkIn: date,
+          checkOut: null,
+          lastDay: lastCheckOutDay,
+          renderAll: false,
+        });
+      }
+    } else if (this.state.checkIn === null) {
+      const lastCheckOutDay = this.lookForLastDay(date);
+      this.setState({
+        checkIn: date,
+        lastDay: lastCheckOutDay,
+        renderAll: false,
+      });
+    } else if (this.state.checkIn !== null) {
+      this.setCheckOut(date);
+    }
+  }
+
+  setCheckOut(date) {
+    // console.log('inside calendar setcheckOUT', date);
+
+    this.setState({
+      checkOut: date,
+      lastDay: null,
+      renderAll: true,
+    });
+    // console.log('current checkout date', date);
   }
 
   render() {
@@ -118,11 +182,18 @@ class Calendar extends React.Component {
                 <div>Availability</div>
               </h2>
             </div>
-            <Message clicked={this.state.clicked} minNights={this.props.listing.minNights} clearDate={this.clearDate} />
+            <Message
+              clicked={this.state.clicked}
+              minNights={this.props.listing.minNights}
+              clearDate={this.clearDate}
+            />
             <div style={styleCalendar}>
 
               <div id="calendarContainer">
-                <Button backwardMonth={this.backwardMonth} forwardMonth={this.forwardMonth} />
+                <Button
+                  backwardMonth={this.backwardMonth}
+                  forwardMonth={this.forwardMonth}
+                />
                 <div id="calendars">
                   <div id="calendar1" style={calendars}>
                     <div style={monthStyle} className="current-month-calendar">
@@ -130,7 +201,15 @@ class Calendar extends React.Component {
                     </div>
                     <table className="calendar-day">
                       <WeekDays />
-                      <DaysInMonth month={this.state.dateObject} listing={this.props.listing} />
+                      <DaysInMonth
+                        month={this.state.dateObject}
+                        listing={this.props.listing}
+                        setCheckIn={this.setCheckIn}
+                        checkInDate={this.state.checkIn}
+                        checkOutDate={this.state.checkOut}
+                        lastDay={this.state.lastDay}
+                        renderAll={this.state.renderAll}
+                      />
                     </table>
                   </div>
                   <div id="calendar2" style={calendars}>
@@ -139,7 +218,15 @@ class Calendar extends React.Component {
                     </div>
                     <table className="next-calendar-day">
                       <WeekDays />
-                      <DaysInMonth month={this.state.nextMonth} listing={this.props.listing} />
+                      <DaysInMonth
+                        month={this.state.nextMonth}
+                        listing={this.props.listing}
+                        setCheckIn={this.setCheckIn}
+                        checkInDate={this.state.checkIn}
+                        checkOutDate={this.state.checkOut}
+                        lastDay={this.state.lastDay}
+                        renderAll={this.state.renderAll}
+                      />
                     </table>
                   </div>
                 </div>

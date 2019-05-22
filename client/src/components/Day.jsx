@@ -82,12 +82,16 @@ class Day extends React.Component {
     super(props);
     this.state = {
       checkIn: false,
+      checkDate: null,
     };
-    this.changeStyle = this.changeStyle.bind(this);
+    this.checkDate = this.checkDate.bind(this);
   }
 
-  changeStyle(e) {
-    this.setState({ checkIn: !this.state.checkIn });
+  checkDate(e) {
+    // if click date same as checkin date ignore it
+    if (this.props.checkInDate !== this.props.checkDate) {
+      this.props.setCheckIn(this.props.checkDate);
+    }
   }
 
   render() {
@@ -105,12 +109,24 @@ class Day extends React.Component {
       );
     }
 
-    const tdStyling = this.state.checkIn ? clickedTd : availableTd;
-    const divStyling = this.state.checkIn ? clickedDiv : availableDiv;
+    if (this.props.selected) {
+      // console.log(`this day is between checkin and checkout :${this.props.checkDate}`);
+    }
 
+    // if (this.state.checkIn) {
+    //   const tdStyling = clickedTd;
+    //   const divStyling = clickedDiv;
+    // } else {
+    //   const tdStyling = this.props.selected ? clickedTd : availableTd;
+    //   const divStyling = this.props.selected ? clickedDiv : availableDiv;
+    // }
+
+
+    const tdStyling = this.props.selected ? clickedTd : availableTd;
+    const divStyling = this.props.selected ? clickedDiv : availableDiv;
 
     return (
-      <td onClick={this.changeStyle} style={tdStyling} key={this.props.d} className="calendar-day">
+      <td onClick={this.checkDate} style={tdStyling} key={this.props.d} className="calendar-day">
         <div style={div1}>
           <div style={div2}>
             <div style={divStyling}>{this.props.d}</div>

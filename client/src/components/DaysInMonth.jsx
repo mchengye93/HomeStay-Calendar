@@ -2,86 +2,13 @@ import React from 'react';
 import moment from 'moment';
 import Day from './Day.jsx';
 
-const bookedTd = {
-  width: '40px',
-  height: '39px',
-  background: 'repeating-linear-gradient(-45deg, rgb(255, 255, 255), rgb(255, 255, 255) 3px, rgb(235, 235, 235) 3px, rgb(235, 235, 235) 4px)',
-  color: 'rgb(0, 0, 0)',
-  border: '2px solid rgb(255, 255, 255)',
-  borderRadius: '7px ',
-  padding: '0px',
-};
 
-const div1 = {
-  height: '38px',
-  position: 'relative',
-  width: '38px',
-  margin: '0px',
-};
-
-const div2 = {
-  paddingBottom: '13px',
-  paddingTop: '13px',
-  fontSize: '14px',
-
-};
-
-const bookedDiv = {
-  fontFamily: 'Circular, -apple-system, BlinkMacSystemFont, Roboto, "Helvetica Neue", sans-serif',
-  fontWeight: '700',
-  height: '12px',
-  lineHeight: '12px',
-  textAlign: 'center',
-  width: '38px',
-  color: 'rgb(216, 216, 216)',
-};
-
-
-const clickedTd = {
-  width: '40px',
-  height: '39px',
-  background: 'rgb(0, 132, 137)',
-  color: 'rgb(0, 0, 0)',
-  border: '2px solid rgb(255, 255, 255)',
-  borderRadius: '7px',
-  padding: '0px',
-
-};
-
-const clickedDiv = {
-  fontFamily: 'Circular, -apple-system, BlinkMacSystemFont, Roboto, "Helvetica Neue", sans-serif',
-  fontWeight: '700',
-  height: '12px',
-  lineHeight: '12px',
-  textAlign: 'center',
-  width: '38px',
-  color: 'rgb(255, 255, 255)',
-};
-
-const availableTd = {
-  width: '40px',
-  height: '39px',
-  background: 'rgb(237, 246, 246)',
-  color: 'rgb(0, 132, 137)',
-  border: '2px solid rgb(255, 255, 255)',
-  borderRadius: '7px',
-  padding: '0px',
-};
-
-const availableDiv = {
-  fontFamily: 'Circular, -apple-system, BlinkMacSystemFont, Roboto, "Helvetica Neue", sans-serif',
-  fontWeight: '700',
-  height: '12px',
-  lineHeight: '12px',
-  textAlign: 'center',
-  width: '38px',
-  color: 'rgb(0, 132, 137)',
-};
 class DaysInMonth extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       dateObject: this.props.month,
+
     };
 
     this.daysInMonth = this.daysInMonth.bind(this);
@@ -91,8 +18,6 @@ class DaysInMonth extends React.Component {
     this.totalSlots = this.totalSlots.bind(this);
 
     this.bookedDay = this.bookedDay.bind(this);
-
-    this.changeStyle = this.changeStyle.bind(this);
   }
 
 
@@ -123,11 +48,6 @@ class DaysInMonth extends React.Component {
     // console.log('booked contains', booked.includes(day));
   }
 
-  changeStyle(e) {
-    console.log(e.target);
-    this.setState({ checkIn: !this.state.checkIn });
-  }
-
 
   daysInMonth() {
     const { dateObject } = this.state;
@@ -144,16 +64,59 @@ class DaysInMonth extends React.Component {
     for (let d = 1; d <= totalDaysInMonth; d += 1) {
       const day = d > 9 ? d : `0${d}`;
       const date = `${year}-${month}-${day}`;
-      const booked = this.bookedDay(date) ? 'booked' : '';
+      // const booked = this.bookedDay(date) ? 'booked' : '';
 
       const currentDate = new Date();
       currentDate.setDate(currentDate.getDate() - 1);
       const beforeCurrent = new Date(date) < currentDate;
 
-      if (this.bookedDay(date) || beforeCurrent) {
-        daysInMonth.push(<Day d={d} booked="true" />);
+      // const beforeCheckIn = new Date(date) < new Date(this.props.checkInDate);
+
+      const afterLastDay = false;
+      if (this.props.lastDay !== null) {
+        const lastDay = new Date(date) > new Date(this.props.lastDay);
+        if (lastDay) {
+          afterLastDay = true;
+        }
+      }
+
+      // if render all we dont care about checkin now
+      const beforeCheckIn = false;
+      if (!this.props.renderAll) {
+        beforeCheckIn = new Date(date) < new Date(this.props.checkInDate);
+      }
+
+      const selected = false;
+
+      if (this.props.checkInDate !== null && this.props.checkOutDate !== null) {
+        const selectDate = new Date(date);
+        if (selectDate >= new Date(this.props.checkInDate) && selectDate <= new Date(this.props.checkOutDate)) {
+          selected = true;
+        }
+      }
+
+
+      if (this.props.checkInDate !== null) {
+        if (date === this.props.checkInDate) {
+          selected = true;
+        }
+      }
+
+
+      if (this.bookedDay(date) || beforeCurrent || beforeCheckIn || afterLastDay) {
+        daysInMonth.push(<Day
+          d={d}
+          booked="true"
+        />);
       } else {
-        daysInMonth.push(<Day d={d} booked="false" />);
+        daysInMonth.push(<Day
+          d={d}
+          booked="false"
+          checkInDate={this.props.checkInDate}
+          checkDate={date}
+          setCheckIn={this.props.setCheckIn}
+          selected={selected}
+        />);
       }
     }
     return daysInMonth;
