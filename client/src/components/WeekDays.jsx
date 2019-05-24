@@ -5,7 +5,7 @@ const weekDay = {
   boxSizing: 'border-box',
   color: 'rgb(117, 117, 117)',
   fontFamily: 'Circular, -apple-system, system-ui, Roboto, "Helvetica Neue", sans-serif',
-  fontSize: '14px',
+  fontSize: '13px',
   height: '20px',
   lineHeight: '20.02px',
   textAlign: 'center',
@@ -16,9 +16,9 @@ const WeekDays = () => {
 
   const weekdaysshortname = weekdayshort.map(day => (
 
-    <th style={weekDay} key={day} className="week-day">
+    <td style={weekDay} key={day} className="week-day">
       {day.substring(0, 2)}
-    </th>
+    </td>
   ));
   return (
     <thead>

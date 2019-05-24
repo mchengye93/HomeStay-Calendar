@@ -21,9 +21,9 @@ const buttonSpan = {
   lineHeight: '1.375em',
   color: '#008489',
   float: 'right',
-  textDecorationLine: 'underline',
   border: '0',
   padding: '0',
+  textDecorationLine: 'underline',
 
 };
 
@@ -53,10 +53,16 @@ class Message extends React.Component {
     };
 
     this.toggleHover = this.toggleHover.bind(this);
+    this.clearDate = this.clearDate.bind(this);
   }
 
   toggleHover() {
     this.setState({ hover: !this.state.hover });
+  }
+
+  clearDate() {
+    this.setState({ hover: false });
+    this.props.clearDate();
   }
 
   render() {
@@ -70,7 +76,7 @@ class Message extends React.Component {
               {' '}
                 night miminum stay · Updated today
             </span>
-            <button onClick={this.props.clearDate} style={buttonSpan} onMouseEnter={this.toggleHover} onMouseLeave={this.toggleHover}>Clear dates</button>
+            <button id="clearDate" onClick={this.clearDate} style={buttonSpan} onMouseEnter={this.toggleHover} onMouseLeave={this.toggleHover}>Clear dates</button>
           </div>
         );
       }
@@ -82,7 +88,7 @@ class Message extends React.Component {
             {' '}
               night miminum stay · Updated today
           </span>
-          <button onClick={this.props.clearDate} style={buttonSpan1} onMouseEnter={this.toggleHover} onMouseLeave={this.toggleHover}>Clear dates</button>
+          <button id="clearDate" onClick={this.props.clearDate} style={buttonSpan1} onMouseEnter={this.toggleHover} onMouseLeave={this.toggleHover}>Clear dates</button>
         </div>
       );
     }
