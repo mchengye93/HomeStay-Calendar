@@ -8,7 +8,7 @@ class DaysInMonth extends React.Component {
     super(props);
     this.state = {
       dateObject: this.props.month,
-
+      highLightDate: null,
 
     };
 
@@ -20,6 +20,8 @@ class DaysInMonth extends React.Component {
 
     this.bookedDay = this.bookedDay.bind(this);
     this.blackOutMinNights = this.blackOutMinNights.bind(this);
+
+    this.highLightDay = this.highLightDay.bind(this);
   }
 
 
@@ -33,11 +35,10 @@ class DaysInMonth extends React.Component {
   bookedDay(date) {
     const booked = this.props.listing.bookings;
     if (booked !== undefined) {
-      // console.log(booked);
       for (let i = 0; i < booked.length; i += 1) {
         const trimDate = booked[i].split('T')[0];
 
-        // console.log('any day ===', trimDate === date);
+
         if (trimDate === date) {
           return true;
         }
@@ -55,7 +56,6 @@ class DaysInMonth extends React.Component {
     minBookDate.setDate(checkInDate.getDate() + minNights);
 
     if (date > checkInDate && date < minBookDate) {
-      // console.log('This day falls between checkin and minbookdate', date);
       return true;
     }
     return false;
@@ -72,6 +72,10 @@ class DaysInMonth extends React.Component {
       return true;
     }
     return false;
+  }
+
+  highLightDay(date) {
+    this.setState({ highLightDate: date });
   }
 
 
@@ -101,7 +105,6 @@ class DaysInMonth extends React.Component {
         }
       }
 
-      // if render all we dont care about checkin now
       const beforeCheckIn = false;
       if (!this.props.renderAll || this.props.secondCheckIn) {
         beforeCheckIn = new Date(date) < new Date(this.props.checkInDate);
@@ -131,13 +134,11 @@ class DaysInMonth extends React.Component {
 
       let minDate = false;
       if (this.inMinNights(new Date(date)) && this.props.highLight) {
-        // console.log('min night dates: ', date);
         minDate = true;
       }
 
       if (this.props.lastHoverDate !== null) {
         if (date <= this.props.lastHoverDate && date > this.props.checkInDate) {
-          // console.log('hey less than last day!');
           minDate = true;
         }
       }
@@ -165,6 +166,8 @@ class DaysInMonth extends React.Component {
           showMinNights={this.props.showMinNights}
           lastDay={this.props.lastDay}
           showNightsBeforeLast={this.props.showNightsBeforeLast}
+          highLightDay={this.highLightDay}
+          highLightDate={this.state.highLightDate}
 
         />);
       }

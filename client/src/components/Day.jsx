@@ -1,15 +1,61 @@
+/* eslint-disable jsx-a11y/mouse-events-have-key-events */
+/* eslint-disable jsx-a11y/click-events-have-key-events */
+/* eslint-disable jsx-a11y/no-noninteractive-element-interactions */
+/* eslint-disable react/destructuring-assignment */
+/* eslint-disable react/prop-types */
 import React from 'react';
 import styled from 'styled-components';
 
-const Td = styled.td`
-  width: '40px',
-  height: '39px',
-  background: 'repeating-linear-gradient(-45deg, rgb(255, 255, 255), rgb(255, 255, 255) 3px, rgb(235, 235, 235) 3px, rgb(235, 235, 235) 4px)',
-  color: 'rgb(0, 0, 0)',
-  border: '1px solid rgb(255, 255, 255)',
-  borde-radius: '5px ',
-  padding: '0px',
+const Div = styled.div`
+font-family: Circular, -apple-system, BlinkMacSystemFont, Roboto, Helvetica Neue, sans-serif';
+font-weight: 700;
+height: 12px;
+line-height: 12px;
+text-align: center;
+width: 38px;
+`;
 
+const AvailableDiv = styled(Div)`
+color: rgb(0, 132, 137);
+background: rgb(237, 246, 246);
+`;
+
+const ClickedDiv = styled(Div)`
+color: rgb(255, 255, 255);
+background: rgb(0, 132, 137);
+`;
+
+const MinNightsDiv = styled(Div)`
+color:rgb(255, 255, 255);
+`;
+const Td = styled.td`
+  width: 40px;
+  height: 39px;
+  color: rgb(0, 0, 0);
+  border: 1px solid rgb(255, 255, 255);
+  borde-radius: 5px;
+  padding: 0px;
+
+`;
+const ClickedTd = styled(Td)`
+background: rgb(0, 132, 137);
+`;
+
+const BookedTd = styled(Td)`
+background: repeating-linear-gradient(-45deg, rgb(255, 255, 255), rgb(255, 255, 255) 3px, rgb(235, 235, 235) 3px, rgb(235, 235, 235) 4px);
+`;
+const AvailableTd = styled(Td)`
+background: rgb(237, 246, 246);
+color: rgb(0, 132, 137);
+`;
+const HighlightTd = styled(Td)`
+background: rgb(204,238,235);
+color: rgb(0, 132, 137);
+`;
+
+const MinNightsTd = styled(Td)`
+color:rgb(255, 255, 255);
+background: rgb(204,238,235);
 `;
 
 const MessageDiv = styled.div` 
@@ -35,30 +81,18 @@ const MessageSpan = styled.span`
 
 `;
 
+const Div1 = styled.div`
+height: 38px;
+position: relative;
+width: 38px;
+margin: 0px;
+`;
 
-const bookedTd = {
-  width: '40px',
-  height: '39px',
-  background: 'repeating-linear-gradient(-45deg, rgb(255, 255, 255), rgb(255, 255, 255) 3px, rgb(235, 235, 235) 3px, rgb(235, 235, 235) 4px)',
-  color: 'rgb(0, 0, 0)',
-  border: '1px solid rgb(255, 255, 255)',
-  borderRadius: '5px ',
-  padding: '0px',
-};
-
-const div1 = {
-  height: '38px',
-  position: 'relative',
-  width: '38px',
-  margin: '0px',
-};
-
-const div2 = {
-  paddingBottom: '13px',
-  paddingTop: '13px',
-  fontSize: '13px',
-
-};
+const Div2 = styled.div`
+padding-bottom: 13px;
+padding-top:13px;
+font-size:13px
+`;
 
 const bookedDiv = {
   fontFamily: 'Circular, -apple-system, BlinkMacSystemFont, Roboto, "Helvetica Neue", sans-serif',
@@ -112,16 +146,6 @@ const availableDiv = {
   color: 'rgb(0, 132, 137)',
 };
 
-const highLightTd = {
-  width: '40px',
-  height: '39px',
-  background: 'rgb(237, 246, 246)',
-  color: 'rgb(0, 132, 137)',
-  border: '1px solid rgb(255, 255, 255)',
-  borderRadius: '5px',
-  padding: '0px',
-  background: 'rgb(204,238,235)',
-};
 
 const minNightsDiv = {
   fontFamily: 'Circular, -apple-system, BlinkMacSystemFont, Roboto, "Helvetica Neue", sans-serif',
@@ -136,8 +160,6 @@ const minNightsDiv = {
 const minNightsTd = {
   width: '40px',
   height: '39px',
-  background: 'rgb(237, 246, 246)',
-  color: 'rgb(255, 255, 255)',
   border: '1px solid rgb(255, 255, 255)',
   borderRadius: '5px',
   padding: '0px',
@@ -147,26 +169,20 @@ const minNightsTd = {
 class Day extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {
 
-      highLight: false,
-    };
     this.checkDate = this.checkDate.bind(this);
 
     this.mouseOutCheck = this.mouseOutCheck.bind(this);
     this.mouseOverCheck = this.mouseOverCheck.bind(this);
   }
 
-  checkDate(e) {
-    // if click date same as checkin date ignore it
-
+  checkDate() {
     if (this.props.checkInDate !== this.props.checkDate) {
       this.props.setCheckIn(this.props.checkDate);
     }
   }
 
-  mouseOverCheck(e) {
-    this.setState({ highLight: true });
+  mouseOverCheck() {
     if (this.props.checkInDate === this.props.checkDate && this.props.showMinNights !== undefined) {
       this.props.showMinNights();
     }
@@ -174,117 +190,123 @@ class Day extends React.Component {
       && this.props.checkInDate !== null && this.props.checkOutDate === null) {
       this.props.showNightsBeforeLast(this.props.checkDate);
     }
-    // console.log('this day less than last day?', this.props.showNightsBeforeLast(this.props.checkDate));
+    if (this.props.highLightDay !== undefined) {
+      this.props.highLightDay(this.props.checkDate);
+    }
   }
 
-  mouseOutCheck(e) {
-    this.setState({ highLight: false });
+  mouseOutCheck() {
     if (this.props.checkInDate === this.props.checkDate && this.props.noMinNights !== undefined) {
       this.props.noMinNights();
     }
+    if (this.props.highLightDay !== undefined) {
+      this.props.highLightDay(null);
+    }
   }
 
-  render() {
-    let tdStyling = minNightsTd;
-    let divStyling = minNightsDiv;
-    if (this.props.checkDate < this.props.lastDay) {
-      // console.log('current day less than last day!');
-    }
 
+  render() {
+    let divStyling = minNightsDiv;
     if (this.props.highLight && this.props.checkOutDate === null) {
       return (
-        <td
+        <MinNightsTd
           id="click1"
           onClick={this.checkDate}
-          style={tdStyling}
+
           key={this.props.d}
-          className="calendar-day"
+          className="calendar-day minNights"
           onMouseOver={this.mouseOverCheck}
           onMouseOut={this.mouseOutCheck}
+          onFocus={this.mouseOverCheck}
+          onBlur={this.mouseOutCheck}
         >
-          <div style={div1}>
-            <div style={div2}>
+          <Div1>
+
+            <Div2>
               <div style={divStyling}>{this.props.d}</div>
-            </div>
-          </div>
-        </td>
+            </Div2>
+
+          </Div1>
+
+        </MinNightsTd>
       );
     }
-
-
-    if (this.state.highLight && !this.props.selected) {
-      tdStyling = highLightTd;
-      divStyling = availableDiv;
-      return (
-        <td
-          id="click"
-          onClick={this.checkDate}
-          style={tdStyling}
-          key={this.props.d}
-          className="calendar-day"
-          onMouseOver={this.mouseOverCheck}
-          onMouseOut={this.mouseOutCheck}
-        >
-          <div style={div1}>
-            <div style={div2}>
-              <div style={divStyling}>{this.props.d}</div>
-            </div>
-          </div>
-        </td>
-      );
-    }
-
 
     if (this.props.booked === 'true') {
-      // console.log('inside true!');
       return (
-        <td style={bookedTd} key={this.props.d} className="calendar-day booked">
-          <div style={div1}>
-            <div style={div2}>
+        <BookedTd
+          key={this.props.d}
+          className="calendar-day booked"
+        >
+          <Div1>
+
+            <Div2>
               <div style={bookedDiv}>{this.props.d}</div>
-            </div>
-          </div>
-        </td>
+            </Div2>
+
+          </Div1>
+        </BookedTd>
+      );
+    }
+
+    if (this.props.checkDate === this.props.highLightDate && this.props.highLightDate !== null && !this.props.selected) {
+      divStyling = availableDiv;
+      return (
+        <HighlightTd
+          id="click"
+          onClick={this.checkDate}
+          key={this.props.d}
+          className="calendar-day"
+          onMouseOver={this.mouseOverCheck}
+          onMouseOut={this.mouseOutCheck}
+
+        >
+          <Div1>
+
+            <Div2>
+              <div style={divStyling}>{this.props.d}</div>
+            </Div2>
+
+          </Div1>
+
+        </HighlightTd>
       );
     }
 
 
-    tdStyling = this.props.selected ? clickedTd : availableTd;
+    const tdStyling = this.props.selected ? clickedTd : availableTd;
     divStyling = this.props.selected ? clickedDiv : availableDiv;
 
     if (this.props.checkInDate === this.props.checkDate && this.props.checkOutDate === null) {
       return (
-        <td
+        <ClickedTd
           id="click1"
           onClick={this.checkDate}
-          style={tdStyling}
+
           key={this.props.d}
-          className="calendar-day"
+          className="calendar-day selected"
           onMouseOver={this.mouseOverCheck}
           onMouseOut={this.mouseOutCheck}
-        >
-          <div style={div1}>
-            <MessageDiv>
 
-              <div>
-                <MessageSpan>
-                  <span>
-                    <div id="minNightsSpan">
-                      {this.props.minNights}
-                      {' '}
+        >
+          <Div1>
+            <MessageDiv>
+              <MessageSpan>
+                <div id="minNightsSpan">
+                  {this.props.minNights}
+                  {' '}
 night minimum stay
-                      {' '}
-                    </div>
-                  </span>
-                </MessageSpan>
-              </div>
+                  {' '}
+                </div>
+              </MessageSpan>
             </MessageDiv>
 
-            <div style={div2}>
+            <Div2>
               <div style={divStyling}>{this.props.d}</div>
-            </div>
-          </div>
-        </td>
+            </Div2>
+
+          </Div1>
+        </ClickedTd>
       );
     }
     return (
@@ -293,18 +315,22 @@ night minimum stay
         onClick={this.checkDate}
         style={tdStyling}
         key={this.props.d}
-        className="calendar-day"
+        className="calendar-day available"
         onMouseOver={this.mouseOverCheck}
         onMouseOut={this.mouseOutCheck}
+        onBlur={this.mouseOutCheck}
       >
+        <Div1>
+          <Div2>
 
-        <div style={div1}>
-          <div style={div2}>
             <div style={divStyling}>{this.props.d}</div>
-          </div>
-        </div>
+
+          </Div2>
+
+        </Div1>
       </td>
     );
   }
 }
+
 export default Day;

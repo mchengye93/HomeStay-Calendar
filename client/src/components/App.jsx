@@ -67,7 +67,6 @@ class App extends React.Component {
   }
 
   render() {
-    // console.log(this.state.listing);
     const calendarDiv = {
       boxSizing: 'border-box',
       color: 'rgb(72, 72, 72)',
